@@ -349,14 +349,7 @@ async def xonfusle(ctx, member: discord.Member):
 @bot.command()
 async def rain(ctx):
     await ctx.send("I don’t like coffee; it’s too bitter, but if my beloved Reze makes it, I might drink it, maybe. I mean, when she makes it, she makes it sweet, but even if it’s bitter, I think it’s fine. But coffees are usually bitter, but if I want, I think she’d make it sweet. But I don’t think she knows how to make Turkish coffee because she’s Russian, and why would Russians drink Turkish coffee, am I wrong? I think not, but if I want, she could probably make it. But why would I want Turkish coffee? I think I’d want a much sweeter coffee. But why would she make sweet coffee for me? I think instead of making sweet coffee, she could make tea. But teas become sweet when you add sugar, but I don’t think every tea has to have sugar. So, if I want, she could make the tea sweet, but why would she? I think I could add the sugar myself, but I think sugar is too expensive, so I should drink tea without sugar. But I think tea without sugar isn’t really tea, so I won’t drink tea. That’s why I’d ask my beloved Reze for water.")
-@bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send("Booper doesn't recognize that command. Did you mean `!saken'?")
-    elif isinstance(error, commands.MissingPermissions):
-        await ctx.send("You don't have permission to use that command.")
-    elif isinstance(error, commands.CommandInvokeError):
-        await ctx.send(f"Booper hit an error: {error.original}")
+
 @bot.command()
 async def sudotest(ctx, *, command: str):
     await ctx.send(f"Booper would have run `!{command}`… but this is just a test 🤖")
