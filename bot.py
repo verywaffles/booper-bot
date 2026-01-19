@@ -375,6 +375,9 @@ async def sudo(ctx, *, command: str):
             fake_ctx = await bot.get_context(ctx.message)
             fake_ctx.message.content = f"!{cmd_name} {args}"
             await bot.invoke(cmd, *args.split())
+@bot.command()
+async def spaghettiapple(ctx)
+    await ctx.send("Pizza Banana!")
 if __name__ == "__main__":
     print("Booper is booping...")
     bot.run(token)
