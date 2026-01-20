@@ -13,6 +13,30 @@ DAILY_COOLDOWN = 60 * 60 * 24        # 24 hours
 WEEKLY_COOLDOWN = 60 * 60 * 24 * 7   # 7 days
 WORK_COOLDOWN = 60 * 60              # 1 hour
 
+# Job definitions
+JOBS = {
+    "beggar": {
+        "base_pay": 50,
+        "max_level": 3,
+        "promotion_cost": 200
+    },
+    "cashier": {
+        "base_pay": 120,
+        "max_level": 5,
+        "promotion_cost": 500
+    },
+    "miner": {
+        "base_pay": 200,
+        "max_level": 7,
+        "promotion_cost": 900
+    },
+    "programmer": {
+        "base_pay": 350,
+        "max_level": 10,
+        "promotion_cost": 1500
+    }
+}
+
 
 class Economy(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -196,6 +220,124 @@ class Economy(commands.Cog):
         conn.close()
 
         await ctx.send(f"You worked and earned {amount} 🪙!")
+    @commands.command()
+    async def jobs(self, ctx):
+        """List available jobs."""
+        embed = discord.Embed(title="Available Jobs", color=discord.Color.blue())
+
+        for job, data in self.JOBS.items():
+            embed.add_field(
+            name=job.capitalize(),
+            value=f"Base Pay: {data['base_pay']} 🪙\nMax Level: {data['max_level']}",
+            inline=False
+        )
+@commands.command()
+async def apply(self, ctx, job: str):
+    """Apply for a job."""
+    job = job.lower()
+
+    if job not in self.JOBS:
+        return await ctx.send("❌ That job does not exist.")
+
+    user_id = ctx.author.id
+    db.ensure_user(user_id)
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE users SET job = ?, job_level = 1 WHERE user_id = ?", (job, user_id))
+    conn.commit()
+    conn.close()
+
+    await ctx.send(f"✅ You are now a **Level 1 {job.capitalize()}**!")
+
+    await ctx.send(embed=embed)
+@commands.command()
+async def promote(self, ctx):
+    """Promote your job level (costs money)."""
+    user_id = ctx.author.id
+    db.ensure_user(user_id)
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT job, job_level FROM users WHERE user_id = ?", (user_id,))
+    row = cur.fetchone()
+    conn.close()
+
+    job = row["job"]
+    level = row["job_level"]
+
+    if job is None:
+        return await ctx.send("❌ You don't have a job. Use `!apply <job>` first.")
+
+    job_data = self.JOBS[job]
+
+    if level >= job_data["max_level"]:
+        return await ctx.send("⭐ You are already at the **maximum level** for this job.")
+
+    cost = job_data["promotion_cost"] * level
+    wallet, bank = db.get_balance(user_id)
+
+    if wallet < cost:
+        return await ctx.send(f"❌ You need **{cost} 🪙** to get promoted.")
+
+    # Deduct cost
+    db.change_wallet(user_id, -cost)
+
+    # Promote
+    conn = db.get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET job_level = ? WHERE user_id = ?", (level + 1, user_id))
+    conn.commit()
+    conn.close()
+
+    await ctx.send(
+        f"🎉 **Promotion!** You are now a **Level {level + 1} {job.capitalize()}**.\n"
+        f"Cost: {cost} 🪙"
+    )
+@commands.command()
+async def workjob(self, ctx):
+    """Work your job and earn money based on job + level."""
+    user_id = ctx.author.id
+    db.ensure_user(user_id)
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT job, job_level FROM users WHERE user_id = ?", (user_id,))
+    row = cur.fetchone()
+    conn.close()
+
+    job = row["job"]
+    level = row["job_level"]
+
+    if job is None:
+        return await ctx.send("❌ You don't have a job. Use `!apply <job>` first.")
+
+    job_data = self.JOBS[job]
+
+    # Salary formula
+    base = job_data["base_pay"]
+    pay = base + (level * 20)
+
+    db.change_wallet(user_id, pay)
+
+    await ctx.send(
+        f"💼 You worked as a **Level {level} {job.capitalize()}** and earned **{pay} 🪙**!"
+    )
+@commands.command()
+async def quitjob(self, ctx):
+    """Quit your current job."""
+    user_id = ctx.author.id
+    db.ensure_user(user_id)
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET job = NULL, job_level = 1 WHERE user_id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+
+    await ctx.send("🛑 You have quit your job.")
 
 
 async def setup(bot: commands.Bot):
