@@ -21,6 +21,7 @@ async def setup_hook():
     await bot.load_extension("cogs.moderation")
     await bot.load_extension("cogs.economy")
     await bot.load_extension("cogs.chess")
+    await bot.load_extension("cogs.ai")
     # later: await bot.load_extension("cogs.economy"), etc.
 
 @bot.event
