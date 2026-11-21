@@ -202,6 +202,12 @@ class Fun(commands.Cog):
     @commands.command()
     async def spaghettiapple(self, ctx):
         await ctx.send("Pizza Banana!")
+    @commands.command()
+    async def mashallah(self, ctx):
+        await ctx.send("very halal")
+    @commands.command()
+    async def anwar(self, ctx):
+            await ctx.send("yeah ik that guy hes very haram")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Fun(bot))

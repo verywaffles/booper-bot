@@ -7,6 +7,12 @@ class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        role = discord.utils.get(member.guild.roles, name="Member")
+        if role:
+            await member.add_roles(role)
+
     @commands.command()
     async def waffle(self, ctx, member: discord.Member):
         try:
@@ -88,7 +94,7 @@ class Moderation(commands.Cog):
             await member.remove_roles(role)
             await ctx.send(f"🎉 {member.mention} has been restored to full fun privileges.")
         else:
-            await ctx.send(f"🤔 {member.mention} isn’t in No Fun mode.")
+            await ctx.send(f"🤔 {member.mention} isn't in No Fun mode.")
 
     @commands.command()
     @commands.has_permissions(manage_roles=True)
