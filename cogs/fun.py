@@ -208,6 +208,12 @@ class Fun(commands.Cog):
     @commands.command()
     async def anwar(self, ctx):
             await ctx.send("yeah ik that guy hes very haram")
+    @commands.command()
+    async def yanis(self, ctx):
+            await ctx.send("idir is geeked")
+    @commands.command()
+    async def shaan(self, ctx):
+            await ctx.send("OMG OMG OMG OMG SHAAN HES MY HERO AND MY GOAT AND HES SO SMART AND HES SO HANDSOME AND HES SO FUNNY I LOVE SHAAN I WISH I CAN GET HIS AUTOGRAPH 🔥")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Fun(bot))
