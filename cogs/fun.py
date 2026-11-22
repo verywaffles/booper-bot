@@ -108,7 +108,7 @@ class Fun(commands.Cog):
         await ctx.send(f"🐸 {target.mention} has been frogified. Ribbit.")
 
     @commands.command()
-    async def dice(self, ctx):
+    async def fortune(self, ctx):
         outcomes = [
             "You trip over your own ego.",
             "You gain +3 charisma but lose your wallet.",
