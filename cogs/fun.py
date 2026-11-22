@@ -214,6 +214,8 @@ class Fun(commands.Cog):
     @commands.command()
     async def shaan(self, ctx):
             await ctx.send("OMG OMG OMG OMG SHAAN HES MY HERO AND MY GOAT AND HES SO SMART AND HES SO HANDSOME AND HES SO FUNNY I LOVE SHAAN I WISH I CAN GET HIS AUTOGRAPH 🔥")
-
+    @commands.command()
+    async def ben(self, ctx):
+            await ctx.send("https://giphy.com/gifs/DIIOBGixFnxKeTFwYD")
 async def setup(bot: commands.Bot):
     await bot.add_cog(Fun(bot))
