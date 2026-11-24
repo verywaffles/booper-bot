@@ -219,6 +219,6 @@ class Fun(commands.Cog):
             await ctx.send("https://giphy.com/gifs/DIIOBGixFnxKeTFwYD")
     @commands.command()
     async def matt(self, ctx):
-            await ctx.send("https://giphy.com/gifs/ogGXbiB2f3ErdgcZEB")
+            await ctx.send("I LOVE TACOS!!!!!! https://giphy.com/gifs/ogGXbiB2f3ErdgcZEB")
 async def setup(bot: commands.Bot):
     await bot.add_cog(Fun(bot))
