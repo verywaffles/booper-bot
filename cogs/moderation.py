@@ -66,6 +66,7 @@ class Moderation(commands.Cog):
 
         role = discord.utils.get(guild.roles, name=role_name)
         if not role:
+            await ctx.send(f"Creating the '{role_name}' role and setting permissions...")
             role = await guild.create_role(name=role_name, reason="Created by Booper for No Fun mode")
             for channel in guild.text_channels:
                 await channel.set_permissions(
